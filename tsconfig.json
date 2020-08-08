@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "strict": true,
+    "baseUrl": "./",
+    "outDir": "dist",
+    "removeComments": true,
+    "experimentalDecorators": true,
+    "target": "ES2020",
+    "allowJs": true,
+    "emitDecoratorMetadata": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "types": [
+      "node"
+    ],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+  },
+  "include": [
+    "./src/**/*", "./index.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
