@@ -6,7 +6,6 @@ export interface Conf {
     description: string
     port: number
     host: string
-    protocol: string
     version: string
     debugMode: boolean
   }

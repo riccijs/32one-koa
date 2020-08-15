@@ -1,5 +1,5 @@
 import conf from '../conf/conf'
-import koa from 'koa'
+import Koa from 'koa'
 import logger from 'koa-logger'
 import path from 'path'
 import fs from 'fs'
@@ -10,32 +10,54 @@ import log from './log'
 import stripAnsi from 'strip-ansi'
 import cors from '@koa/cors'
 
+interface Credentials {
+  key?: Buffer
+  cert?: Buffer
+}
+
 export default class Express {
   /**
    * Init
    */
   public init() {
-    const app = new koa()
-    this.initSSLValidation()
+    const app: Koa = new Koa()
+    const credentials: Credentials = this.initSSLValidation()
+
+    if (!credentials) return false 
+
     this.initMiddleware(app)
     this.initModulesConfiguration(app)
 
-    return app
+    return {
+      app,
+      credentials,
+    }
   }
   
   /**
    * Validate certs exit (if secure.ssl)
    */
   private initSSLValidation() {
-    if (!conf.secure.ssl) return true
-    const privateKey = fs.existsSync(path.resolve(conf.secure.privateKey))
-    const certificate = fs.existsSync(path.resolve(conf.secure.certificate))
+    const privateKeyExists = fs.existsSync(path.resolve(conf.secure.privateKey))
+    const certificateExists = fs.existsSync(path.resolve(conf.secure.certificate))
   
-    if (!privateKey || !certificate) {
+    if (!privateKeyExists || !certificateExists) {
       console.log('---------------------------------------------------------')
-      console.log(chalk.yellow('+ Warning: Certificate file or key file is missing, falling back to non-SSL mode'))
-      console.log(chalk.yellow(`+ MISSING: ${conf.secure.privateKey} AND/OR ${conf.secure.certificate}`))
+      console.log(chalk.red('+ Error: Certificate file or key file is missing, @32one/koa requires certificates to run'))
+      console.log(chalk.red(`+ MISSING: ${conf.secure.privateKey} AND/OR ${conf.secure.certificate}`))
       conf.secure.ssl = false
+      return {
+        key: void 0,
+        cert: void 0,
+      }
+    }
+    else {
+      const key = fs.readFileSync(path.resolve(conf.secure.privateKey))
+      const cert = fs.readFileSync(path.resolve(conf.secure.certificate))
+      return {
+        key,
+        cert,
+      }
     }
   }
   
