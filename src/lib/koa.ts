@@ -78,11 +78,12 @@ export default class Express {
     app.use(logger(str => {
       log.defaultMeta = { ...log.defaultMeta, timestamp: new Date()},
       log.info(stripAnsi(str))
-      app.on('error', err => {
-        log.defaultMeta = { ...log.defaultMeta, error: err.toString() },
-        log.error(stripAnsi(str))
-      })
     }))
+
+    app.on('error', err => {
+      log.defaultMeta = { ...log.defaultMeta, error: err.toString() },
+      log.error(stripAnsi(err))
+    })
 
     /**
      * Error handling
