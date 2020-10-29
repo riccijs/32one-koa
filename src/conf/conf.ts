@@ -5,7 +5,7 @@ import { Conf } from './compiler/types'
 /**
  * Get and load the conf file, for the environment
  */
-customENV.env(process.env.NODE_ENV)
+customENV.env(process.env.NODE_ENV, 'secret')
 
 /**
  * Destructure constants from the process.env
