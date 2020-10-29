@@ -1,10 +1,11 @@
 import * as customENV from 'custom-env'
+import * as glob from 'glob'
 import { Conf } from './compiler/types'
 
 /**
  * Get and load the conf file, for the environment
  */
-customENV.env(`secret/.env.${process.env.NODE_ENV}`)
+customENV.env(process.env.NODE_ENV)
 
 /**
  * Destructure constants from the process.env
