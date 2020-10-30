@@ -2,6 +2,8 @@ import conf from './src/conf/conf'
 import KoaLib from './src/lib/koa'
 import chalk from 'chalk'
 import https from 'https'
+import koaBody from 'koa-body'
+import koa from 'koa'
 export { default as log } from './src/lib/log'
 export { default as conf } from './src/conf/conf'
 
@@ -14,7 +16,7 @@ class Koa {
 
       if (!appInitialization) throw Error ('Application failed to initialize')
 
-      const { app, credentials } = appInitialization
+      const { app } = appInitialization
       
       const { host, port, title } = conf.app
       const SERVER_URI = `https://${host}:${port}`
@@ -28,8 +30,7 @@ class Koa {
       console.log(chalk.green(`Server:              ${SERVER_URI}`))
       console.log('---------------------------------------------------------')
 
-      const server = await https.createServer(credentials, app.callback())
-      await server.listen(port)
+      await app.listen(port)
     } catch (error) {
       console.log(chalk.red('FAILED TO COMPILE', error))
     }
