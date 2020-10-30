@@ -19,7 +19,7 @@ class Koa {
       const { app } = appInitialization
       
       const { host, port, title } = conf.app
-      const SERVER_URI = `https://${host}:${port}`
+      const SERVER_URI = `http://${host}:${port}`
 
       /**
        * Report application running
