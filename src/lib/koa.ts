@@ -21,16 +21,16 @@ export default class Express {
    */
   public init() {
     const app: Koa = new Koa()
-    // const credentials: Credentials = this.initSSLValidation()
+    const credentials: Credentials = this.initSSLValidation()
 
-    // if (!credentials) return false 
+    if (!credentials) return false 
 
     this.initMiddleware(app)
     this.initModulesConfiguration(app)
 
     return {
       app,
-      // credentials,
+      credentials,
     }
   }
   
