@@ -100,7 +100,7 @@ export default class Express {
       }
    })
 
-    app.use(cors({origin: '*'}))
+    app.use(cors({origin: '*', exposeHeaders: true}))
   }
   
   /**
