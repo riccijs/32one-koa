@@ -1,6 +1,6 @@
 {
   "name": "@32one/koa",
-  "version": "0.6.12",
+  "version": "0.6.13",
   "description": "NodeJs Koa Microservices",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
