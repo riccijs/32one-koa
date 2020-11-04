@@ -16,8 +16,8 @@ class Koa {
 
       const { app, credentials } = appInitialization
       
-      const { host, port, title } = conf.app
-      const SERVER_URI = `https://${host}:${port}`
+      const { protocol, hostname, port, title } = conf.app
+      const SERVER_URI = `${protocol}://${hostname}:${port}`
 
       /**
        * Report application running
@@ -28,8 +28,13 @@ class Koa {
       console.log(chalk.green(`Server:              ${SERVER_URI}`))
       console.log('---------------------------------------------------------')
 
-      const server = await https.createServer(credentials, app.callback())
-      await server.listen(port)
+      if (protocol === 'https') {
+        const server = await https.createServer(credentials, app.callback())
+        await server.listen(port)
+      }
+      else {
+        await app.listen(port, hostname)
+      }
     } catch (error) {
       console.log(chalk.red('FAILED TO COMPILE', error))
     }

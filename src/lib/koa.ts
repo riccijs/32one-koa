@@ -40,8 +40,9 @@ export default class Express {
   private initSSLValidation() {
     const privateKeyExists = fs.existsSync(path.resolve(conf.secure.privateKey))
     const certificateExists = fs.existsSync(path.resolve(conf.secure.certificate))
+    const { protocol } = conf.app
   
-    if (!privateKeyExists || !certificateExists) {
+    if (!privateKeyExists || !certificateExists && protocol === 'https') {
       console.log('---------------------------------------------------------')
       console.log(chalk.red('+ Error: Certificate file or key file is missing, @32one/koa requires certificates to run'))
       console.log(chalk.red(`+ MISSING: ${conf.secure.privateKey} AND/OR ${conf.secure.certificate}`))
@@ -51,13 +52,17 @@ export default class Express {
         cert: void 0,
       }
     }
-    else {
+    else if (protocol === 'https') {
       const key = fs.readFileSync(path.resolve(conf.secure.privateKey))
       const cert = fs.readFileSync(path.resolve(conf.secure.certificate))
       return {
         key,
         cert,
       }
+    }
+    return {
+      key: void 0,
+      cert: void 0,
     }
   }
   
@@ -100,7 +105,15 @@ export default class Express {
       }
    })
 
-    app.use(cors({origin: 'https://cm-dev.32one.live', exposeHeaders: true, credentials: true}))
+    function checkOriginAgainstWhitelist(ctx) {
+        const requestOrigin = ctx.accept.headers.origin
+        if (!conf.secure.allowOrigin.includes(requestOrigin)) {
+            return ctx.throw(`🙈 ${requestOrigin} is not a valid origin`)
+        }
+        return requestOrigin
+    }
+
+    app.use(cors({origin: checkOriginAgainstWhitelist, exposeHeaders: true, credentials: true}))
   }
   
   /**

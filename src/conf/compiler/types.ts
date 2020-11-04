@@ -5,7 +5,8 @@ export interface Conf {
     title: string
     description: string
     port: number
-    host: string
+    hostname: string
+    protocol: string
     version: string
     debugMode: boolean
   }
@@ -15,6 +16,7 @@ export interface Conf {
     ssl: boolean
     privateKey: string
     certificate: string
+    allowOrigin: string[]
   },
 
   // Live reload
