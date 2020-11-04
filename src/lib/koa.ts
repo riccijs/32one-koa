@@ -100,7 +100,7 @@ export default class Express {
       }
    })
 
-    app.use(cors({origin: true, exposeHeaders: true, credentials: true}))
+    app.use(cors({origin: '*.32one.live, 32one.live', exposeHeaders: true, credentials: true}))
   }
   
   /**
