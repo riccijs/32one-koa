@@ -107,8 +107,12 @@ export default class Express {
 
     function checkOriginAgainstWhitelist(ctx) {
         const requestOrigin = ctx.accept.headers.origin
+
+        if (conf.secure.allowOrigin.length === 1) {
+          return conf.secure.allowOrigin.pop()
+        }
         if (!conf.secure.allowOrigin.includes(requestOrigin)) {
-            return ctx.throw(`🙈 ${requestOrigin} is not a valid origin`)
+            return ctx.throw(`${requestOrigin} is not a valid origin`)
         }
         return requestOrigin
     }

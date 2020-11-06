@@ -44,7 +44,7 @@ const conf: Conf = {
     ssl: SECURE_SSL === 'true',
     privateKey: SECURE_PRIVATE_KEY,
     certificate: SECURE_CERTIFICATE,
-    allowOrigin: SECURE_ALLOW_ORIGIN.split(',') || [],
+    allowOrigin: SECURE_ALLOW_ORIGIN.split(',') || [ SECURE_ALLOW_ORIGIN || ''],
   },
 
   // Live reload
