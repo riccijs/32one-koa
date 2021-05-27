@@ -9,6 +9,7 @@ import bodyParser from 'koa-body'
 import log from './log'
 import stripAnsi from 'strip-ansi'
 import cors from '@koa/cors'
+import websockify from 'koa-websocket'
 
 interface Credentials {
   key?: Buffer
@@ -20,7 +21,7 @@ export default class Express {
    * Init
    */
   public init() {
-    const app: Koa = new Koa()
+    const app: Koa = websockify(new Koa())
     const credentials: Credentials = this.initSSLValidation()
 
     if (!credentials) return false 
