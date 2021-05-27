@@ -9,7 +9,6 @@ import bodyParser from 'koa-body'
 import log from './log'
 import stripAnsi from 'strip-ansi'
 import cors from '@koa/cors'
-import websockify from 'koa-websocket'
 
 interface Credentials {
   key?: Buffer
@@ -21,7 +20,7 @@ export default class Express {
    * Init
    */
   public init(): { app: Koa, credentials: Credentials } | false {
-    const app: Koa = websockify(new Koa())
+    const app: Koa = new Koa()
     const credentials: Credentials = this.initSSLValidation()
 
     if (!credentials) return false 
@@ -119,11 +118,6 @@ export default class Express {
     }
 
     app.use(cors({origin: checkOriginAgainstWhitelist, exposeHeaders: true, credentials: true}))
-
-    app.ws.use(function(ctx, next) {
-      // return `next` to pass the context (ctx) on to the next ws middleware
-      return next(ctx);
-    })
   }
   
   /**

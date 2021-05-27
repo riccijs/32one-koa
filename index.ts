@@ -2,6 +2,7 @@ import conf from './src/conf/conf'
 import KoaLib from './src/lib/koa'
 import chalk from 'chalk'
 import https from 'https'
+import IO from 'koa-socket-2'
 export { default as log } from './src/lib/log'
 export { default as conf } from './src/conf/conf'
 
@@ -15,7 +16,7 @@ class Koa {
       if (!appInitialization) throw Error ('Application failed to initialize')
 
       const { app, credentials } = appInitialization
-      
+      const io = new IO()
       const { protocol, hostname, port, title } = conf.app
       const SERVER_URI = `${protocol}://${hostname}:${port}`
 
@@ -28,6 +29,8 @@ class Koa {
       console.log(chalk.green(`Server:              ${SERVER_URI}`))
       console.log('---------------------------------------------------------')
 
+      io.attach( app )
+      
       if (protocol === 'https') {
         const server = await https.createServer(credentials, app.callback())
         await server.listen(port)
