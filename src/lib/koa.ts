@@ -20,7 +20,7 @@ export default class Express {
   /**
    * Init
    */
-  public init() {
+  public init(): { app: Koa, credentials: Credentials } | false {
     const app: Koa = websockify(new Koa())
     const credentials: Credentials = this.initSSLValidation()
 
@@ -119,6 +119,11 @@ export default class Express {
     }
 
     app.use(cors({origin: checkOriginAgainstWhitelist, exposeHeaders: true, credentials: true}))
+
+    app.ws.use(function(ctx, next) {
+      // return `next` to pass the context (ctx) on to the next ws middleware
+      return next(ctx);
+    })
   }
   
   /**
@@ -131,7 +136,7 @@ export default class Express {
       asset.forEach((assetPath) => {
         console.log(chalk.green(`+ ADDED - Asset: ${assetPath}`))
         import (path.join(process.cwd(), assetPath)).then(module => {
-          if (!!module.default) {
+          if (module.default) {
             module.default(app)
           }
         })
