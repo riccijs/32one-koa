@@ -34,6 +34,7 @@ class Koa {
       if (protocol === 'https') {
         const server = await https.createServer(credentials, app.callback())
         io.attach(server)
+        io.attach(app)
         await server.listen(port)
       }
       else {
