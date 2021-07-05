@@ -97,7 +97,7 @@ export default class Express {
       try {
         await next()
       } catch (err) {
-        const { _message, message, response, status } = err
+        const { _message, message, response, status }: any = err
         const { status: resStatus, data } = response || { status: 400, data: 'Bad Request' }
         ctx.response.status = status || resStatus
         ctx.response.body = _message || message || data
