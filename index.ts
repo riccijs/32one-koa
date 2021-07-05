@@ -31,10 +31,11 @@ class Koa {
       // console.log(chalk.green(`Served by: @32one/koa v:              ${PackageJson.version}`))
       console.log('---------------------------------------------------------')
       
+      io.attach(app)
+      
       if (protocol === 'https') {
         const server = await https.createServer(credentials, app.callback())
         io.attach(server)
-        io.attach(app)
         await server.listen(port)
       }
       else {
