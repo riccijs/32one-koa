@@ -39,7 +39,6 @@ class Koa {
         await server.listen(port)
       }
       else {
-        io.attach( app )
         await app.listen(port, hostname)
       }
     } catch (error) {
