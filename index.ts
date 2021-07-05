@@ -16,10 +16,9 @@ class Koa {
       if (!appInitialization) throw Error ('Application failed to initialize')
 
       const { app, credentials } = appInitialization
-      const io = new IO()
       const { protocol, hostname, port, title } = conf.app
       const SERVER_URI = `${protocol}://${hostname}:${port}`
-
+      
       /**
        * Report application running
        */
@@ -28,14 +27,16 @@ class Koa {
       console.log(chalk.green(`Environment:         ${process.env.NODE_ENV}`))
       console.log(chalk.green(`Server:              ${SERVER_URI}`))
       console.log('---------------------------------------------------------')
-
-      io.attach( app )
+      
       
       if (protocol === 'https') {
         const server = await https.createServer(credentials, app.callback())
+        new IO(server)
         await server.listen(port)
       }
       else {
+        const io = new IO()
+        io.attach( app )
         await app.listen(port, hostname)
       }
     } catch (error) {
