@@ -5,6 +5,7 @@ import https from 'https'
 import IO from 'koa-socket-2'
 export { default as log } from './src/lib/log'
 export { default as conf } from './src/conf/conf'
+import * as PackageJson from './package.json'
 
 const kao = new KoaLib()
 
@@ -18,6 +19,7 @@ class Koa {
       const { app, credentials } = appInitialization
       const { protocol, hostname, port, title } = conf.app
       const SERVER_URI = `${protocol}://${hostname}:${port}`
+      const io = new IO()
       
       /**
        * Report application running
@@ -26,16 +28,15 @@ class Koa {
       console.log(chalk.green(title))
       console.log(chalk.green(`Environment:         ${process.env.NODE_ENV}`))
       console.log(chalk.green(`Server:              ${SERVER_URI}`))
+      console.log(chalk.green(`Served by: @32one/koa v:              ${PackageJson.version}`))
       console.log('---------------------------------------------------------')
-      
       
       if (protocol === 'https') {
         const server = await https.createServer(credentials, app.callback())
-        new IO(server)
+        io.attach(server)
         await server.listen(port)
       }
       else {
-        const io = new IO()
         io.attach( app )
         await app.listen(port, hostname)
       }
